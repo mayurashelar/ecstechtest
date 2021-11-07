@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite guice-stage="DEVELOPMENT" name="Failed suite [ECS Automation Test Suite]">
+  <test name="ECS Test Cases(failed)">
+    <classes>
+      <class name="com.ecs.techtest.testpages.ArrayChallengeTest">
+        <methods>
+          <include name="verifyArrayChallenge"/>
+          <include name="setUp"/>
+          <include name="tearDown"/>
+        </methods>
+      </class> <!-- com.ecs.techtest.testpages.ArrayChallengeTest -->
+    </classes>
+  </test> <!-- ECS Test Cases(failed) -->
+</suite> <!-- Failed suite [ECS Automation Test Suite] -->

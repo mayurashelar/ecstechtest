@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testng-results skipped="0" failed="0" ignored="0" total="1" passed="1">
+  <reporter-output>
+  </reporter-output>
+  <suite name="ECS Automation Test Suite" duration-ms="4288" started-at="2021-11-07T23:05:06Z" finished-at="2021-11-07T23:05:11Z">
+    <groups>
+    </groups>
+    <test name="ECS Test Cases" duration-ms="4288" started-at="2021-11-07T23:05:06Z" finished-at="2021-11-07T23:05:11Z">
+      <class name="com.ecs.techtest.testpages.ArrayChallengeTest">
+        <test-method status="PASS" signature="setUp()[pri:0, instance:com.ecs.techtest.testpages.ArrayChallengeTest@23a2f9]" name="setUp" is-config="true" duration-ms="3080" started-at="2021-11-07T23:05:06Z" finished-at="2021-11-07T23:05:09Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setUp -->
+        <test-method status="PASS" signature="verifyArrayChallenge()[pri:1, instance:com.ecs.techtest.testpages.ArrayChallengeTest@23a2f9]" name="verifyArrayChallenge" duration-ms="1189" started-at="2021-11-07T23:05:09Z" finished-at="2021-11-07T23:05:11Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- verifyArrayChallenge -->
+        <test-method status="PASS" signature="tearDown()[pri:0, instance:com.ecs.techtest.testpages.ArrayChallengeTest@23a2f9]" name="tearDown" is-config="true" duration-ms="0" started-at="2021-11-07T23:05:11Z" finished-at="2021-11-07T23:05:11Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+      </class> <!-- com.ecs.techtest.testpages.ArrayChallengeTest -->
+    </test> <!-- ECS Test Cases -->
+  </suite> <!-- ECS Automation Test Suite -->
+</testng-results>
