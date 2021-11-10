@@ -1,60 +1,71 @@
 package com.ecs.techtest.pages;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ecs.techtest.base.TestBase;
 import com.ecs.techtest.utils.TestUtil;
-
+/**
+ * This class contains the testing scenario.
+ * 
+ * @author Mayura Patil
+ *
+ */
 public class ArrayChallenge extends TestBase {
 
-	TestUtil testUtil = new TestUtil();
+	private static final By RENDER_BUTTON = By.xpath("//span[contains(text(),'Render the Challenge')]");
+	private static final By WEB_TABLE = By.xpath("//table/tbody");
+	private static final By YOUR_NAME = By.xpath("//input[contains(@id,'undefined-YourName')]");
+	private static final By SUBMIT_ANSWER = By.xpath("//span[contains(text(),'Submit Answers')]");
+	private static final By TABLE_ROW = By.xpath("//table/tbody/tr");
+	private static final By CONGRATS_TEXT = By.xpath("//div[contains(text(),'Congratulations')]");
 
-	By renderButton = By.xpath("//span[contains(text(),'Render the Challenge')]");
-	By webTable = By.xpath("//table/tbody");
-	By yourName = By.xpath("//input[contains(@id,'undefined-YourName')]");
-	By submitAnswer = By.xpath("//span[contains(text(),'Submit Answers')]");
-	
+	public boolean checkArrayChallenge() {
+		
+		try {
+			final ArrayIndexWrapper arrayIndex = new ArrayIndexWrapper();
+			elementWaitAndClick(RENDER_BUTTON);
+			explicitWaitVisibilityOfElementLocated(WEB_TABLE);
+			List<WebElement> rowList = driver.findElements(TABLE_ROW);
+			final AtomicInteger counter = new AtomicInteger(0);
+			rowList.forEach(new Consumer<WebElement>() {
 
-	public ArrayChallenge() {
-		PageFactory.initElements(driver, this);
+				public void accept(WebElement t) {
+					List<Integer> list = t.findElements(By.tagName("td")).stream()
+							.map(element -> Integer.valueOf(element.getText())).collect(Collectors.toList());
+					arrayIndex.setArrayIndex(TestUtil.calculateIndex(list, list.size()/2));
+					driver.findElement(By.xpath(
+							"//input[contains(@id,'undefined-submitchallenge" + (counter.incrementAndGet()) + "')]"))
+							.sendKeys("" + arrayIndex.getArrayIndex());
+				}
 
+			});
+
+			elementWaitAndSendKey(YOUR_NAME, prop.getProperty("yourName"));
+			elementWaitAndClick(SUBMIT_ANSWER);
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+		}
+		return waitAndIsDisplayed(CONGRATS_TEXT);
 	}
 
-	public void checkArrayChallenge() {
-		
-		int[] array = null;
+	private class ArrayIndexWrapper {
 		int arrayIndex = 0;
-		testUtil.explicitWaitvisibilityOfElementLocated(renderButton);
-		driver.findElement(renderButton).click(); // testUtil.doubleClick(renderButton);
-		testUtil.explicitWaitvisibilityOfElementLocated(webTable);
-		List<WebElement> rowList = driver.findElements(By.xpath("//table/tbody/tr"));
-		
-		
-		for(int i = 1; i<=rowList.size();i++)
-		{
-			List<WebElement> colList = driver.findElements(By.xpath("//table/tbody/tr["+i+"]/td"));
-			array = new int[colList.size()];
-			for(int j=1;j<=colList.size();j++)
-			{
-				array[j-1] = Integer.valueOf(driver.findElement(By.xpath("//table/tbody/tr["+i+"]/td["+j+"]")).getText()).intValue();
-					
-			}
-			
-			arrayIndex = testUtil.arrayIndex(array);
-			driver.findElement(By.xpath("//input[contains(@id,'undefined-submitchallenge"+i+"')]")).sendKeys(""+arrayIndex);
-					
-		}		
-		driver.findElement(yourName).sendKeys(prop.getProperty("yourName"));
-		new WebDriverWait(driver, 5000).until(ExpectedConditions.visibilityOfElementLocated(submitAnswer));
-		driver.findElement(submitAnswer).click();
-		
+
+		public void setArrayIndex(int arrayIndex) {
+			this.arrayIndex = arrayIndex;
+		}
+
+		public int getArrayIndex() {
+			return this.arrayIndex;
+		}
+
 	}
 
 }

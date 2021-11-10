@@ -1,63 +1,49 @@
 package com.ecs.techtest.utils;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import java.util.List;
+import java.util.stream.Stream;
 
-import com.ecs.techtest.base.TestBase;
+public class TestUtil {
 
-public class TestUtil extends TestBase {
+	/**
+	 * This method return the index of the array where the sum of integers at
+	 * the index on the left is equal to the sum of integers on the right.
+	 * @param list
+	 * @param sliceIndex
+	 * @return
+	 */
 
-	public static WebDriverWait wait = new WebDriverWait(driver, 20);
-
-	public void explicitWaitvisibilityOfElementLocated(By locator) {
-
-		wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-
-	}
-
-	public int arrayIndex(int[] array) {
-		int frontVal = array[0];
-		int backVal = array[array.length - 1];
-		int i = 0;
-		int j;
-
-		try {
-			for (i = 1, j = array.length - 2; i < array.length;) {
-				if (i == array.length - 1 || j == 0)
-				{
-					i = 0;
-					break;
-				}
-				if (frontVal < backVal) {
-
-					frontVal = frontVal + array[i];
-					i++;
-				} else if (backVal < frontVal) {
-
-					backVal = backVal + array[j];
-					j--;
-
-				} else if (backVal == frontVal) {
-					break;
-				}
-
-			}
-
-		} catch (Exception e) {
-			System.out.println("Exception occured in finding array index");
+	public static int calculateIndex(List<Integer> list, int sliceIndex) {
+		int size = list.size();
+		int frontSum = (getSliceOfStream(list.stream(), 0, sliceIndex).mapToInt(Integer::intValue).sum());
+		int backSum = (getSliceOfStream(list.stream(), sliceIndex, size).mapToInt(Integer::intValue).sum());
+		if (frontSum < backSum) {
+			sliceIndex++;
+			calculateIndex(list, sliceIndex);
+		} else if (frontSum > backSum) {
+			sliceIndex--;
+			calculateIndex(list, sliceIndex);
 		}
 
-		return i;
+		return sliceIndex;
 
 	}
 
-	/*
-	 * public static void main(String[] args) { int[] array = new
-	 * int[]{110,10,20,10,10,100,30,20}; //{} int i = arrayIndex(array);
-	 * System.out.println("Arrray index " +i); }
+	/**
+	 * This method returns the slice of the stream from startIndex to endIndex
+	 * @param stream
+	 * @param startIndex
+	 * @param endIndex
+	 * @return
 	 */
+	public static Stream<Integer> getSliceOfStream(Stream<Integer> stream, int startIndex, int endIndex) {
+		return stream
+				// specify the number of elements to skip
+				.skip(startIndex)
+
+				// specify the no. of elements the stream
+				// that should be limited
+				.limit(endIndex - startIndex + 1);
+	}
 
 }
